@@ -2,57 +2,43 @@
 
 The operating system for modern universities — one intelligent platform connecting admissions, academics, campus operations, finance, AI and student experience.
 
-## Repository structure
+## The website
 
-This is a **monorepo of independent Next.js apps** under `frontend/`. There is no app at the repo root — each folder is its own deployable Next.js application.
+**`frontend/prospec-website`** is the single, unified Next.js app — every page is a route inside it:
 
-```
-frontend/
-├── page-details-extraction/     # Main marketing site — Home (/) + Products (/products)
-├── homepage-design-continuity/  # Standalone homepage export
-├── prospec-products-page/       # Standalone products page export
-├── solutions-page/              # Solutions page
-├── student-portal-prospec/      # Student portal
-├── vista-blue-theme/            # AI Platform (/) + AI Agents (/agents) — light Vista-Blue theme
-└── prospec-ai-page/             # Prospec AI page
-```
+| Route | Page |
+|---|---|
+| `/` | Home |
+| `/products` | Products |
+| `/solutions` | Solutions |
+| `/ai-platform` | AI Platform |
+| `/ai-platform/agents` | AI Agents |
+| `/student-portal` | Student Portal |
 
-## Running an app locally
+Each page keeps its own design; a shared PROSPEC navbar links Home / Products / Solutions / AI Platform / Student Portal.
+
+## Running locally
 
 ```bash
-cd frontend/<app-name>
+cd frontend/prospec-website
 npm install
 npm run dev
 ```
 
-## Deploying to Vercel
-
-Each app deploys as its **own Vercel project**, all importing this same repo but with a different **Root Directory**. Create one Vercel project per app:
-
-| App | Root Directory | Suggested project name |
-|---|---|---|
-| Main marketing site | `frontend/page-details-extraction` | prospec-main |
-| Homepage (standalone) | `frontend/homepage-design-continuity` | prospec-homepage |
-| Products (standalone) | `frontend/prospec-products-page` | prospec-products |
-| Solutions | `frontend/solutions-page` | prospec-solutions |
-| Student portal | `frontend/student-portal-prospec` | prospec-student |
-| AI Platform (Vista Blue) | `frontend/vista-blue-theme` | prospec-ai-platform |
-| Prospec AI page | `frontend/prospec-ai-page` | prospec-ai-page |
-
-For each project on Vercel:
+## Deploying to Vercel (one project)
 
 1. **Add New → Project** → import `prospec-hub/Prospec`.
-2. Set **Root Directory** to the app's folder (table above).
-3. Framework preset **Next.js** is auto-detected (`next build`).
-4. **Deploy.**
+2. Set **Root Directory** to `frontend/prospec-website`.
+3. Framework preset **Next.js** is auto-detected (`next build`). The included `.npmrc` handles peer-dependency resolution.
+4. **Deploy.** The whole site (all routes above) ships as one deployment.
 
-Every app includes an `.npmrc` with `legacy-peer-deps=true`, so installs succeed on Vercel without extra configuration.
+> Private repo + Vercel Hobby plan: deployments only succeed when the commit author matches the Vercel account owner. If it's blocked, make the repo **public**, add the commit author as a collaborator, or upgrade to **Pro**.
 
-### Important: private repo + Vercel plan
+## Source folders
 
-If the repo is **private** on Vercel's **Hobby (free) plan**, deployments only succeed when the commit author matches the Vercel account owner. To deploy without upgrading, either **make the repo public**, or deploy from the account whose commits are pushed, or upgrade to **Vercel Pro**.
+The per-page source apps that were merged into `prospec-website` still live under `frontend/` (`page-details-extraction`, `vista-blue-theme`, `solutions-page`, `student-portal-prospec`, etc.). They are no longer needed for deployment and can be removed.
 
 ## Branches
 
 - `main` — deployment branch (Vercel builds from here).
-- `dev-dipanshu` — active development branch. Both currently point to the same commit.
+- `dev-dipanshu` — active development branch.
